@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+
+  php:
+    container_name: vs.php
+    build: .docker/php
+    volumes:
+      - .:/app
+      - ./var/logs:/app/var/logs
+      - ./var/cache.:/app/var/cache
+    links:
+      - db
+
+  nginx:
+    container_name: vs.nginx
+    build: .docker/nginx
+    volumes_from:
+      - php
+    ports:
+      - "81:80"
+
+  db:
+    image: mysql
+    container_name: vs.db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dbname
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpass
