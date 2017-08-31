@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: vaibhav
  * Date: 8/31/17
- * Time: 1:15 AM
+ * Time: 1:58 AM
  */
 
 namespace AppBundle\Entity;
@@ -12,13 +12,13 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class League
+ * Class Owner
  * @package AppBundle\Entity
  *
  * @ORM\Entity
- * @ORM\Table(name="league")
+ * @ORM\Table(name="owner")
  */
-class League
+class Owner
 {
     /**
      * @ORM\Id
@@ -31,6 +31,15 @@ class League
      * @ORM\Column(type="string")
      */
     protected $name;
+
+    /**
+     * Owner constructor.
+     * @param $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
 
     /**
      * @return mixed
@@ -50,11 +59,13 @@ class League
 
     /**
      * @param mixed $name
-     * @return League
+     * @return Owner
      */
     public function setName($name)
     {
         $this->name = $name;
         return $this;
     }
+
+
 }
