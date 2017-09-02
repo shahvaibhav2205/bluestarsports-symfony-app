@@ -174,7 +174,7 @@ class Team
      */
     public function isValidPlayer(Player $player)
     {
-        if ($this->getCapacity() == 0) {
+        if ($this->getCapacity() == 0 && $player->getTotalAttributeScore() <= 100 && $player->getSalary() <= 175) {
             return true;
         }
         foreach ($this->getPlayers() as $teamPlayer) {

@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Player
  * @package AppBundle\Entity
  *
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PlayerRepository")
+ * @ORM\Entity
  * @ORM\Table(name="player")
  */
 class Player

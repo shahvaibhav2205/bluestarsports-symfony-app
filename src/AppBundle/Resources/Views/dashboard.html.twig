@@ -57,11 +57,11 @@
             <th scope="row">{{ loop.index }}</th>
             <td>
                 {% if player.role == "starter" %}
-                    <i class="fa fa-play"></i>
+                    <i class="fa fa-play" title="Starter"></i>
                 {% elseif player.role == "substitute" %}
-                    <i class="fa fa-pause"></i>
+                    <i class="fa fa-pause" title="Substitute"></i>
                 {% else %}
-                    <i class="fa fa-circle-o"></i>
+                    <i class="fa fa-circle-o" title="undefined"></i>
                 {% endif %}
             </td>
             <td>{{ player.name }}</td>
@@ -85,36 +85,39 @@
 
 {% block additionalJavaScripts %}
     <script type="application/javascript">
-        $(".delete-player").click(function () {
-            $this = $(this);
-            $this.children('i')
-                .removeClass('fa-trash-o')
-                .removeClass('color-red')
-                .addClass('fa-cog')
-                .addClass('fa-spin');
-            var url = $(this).data("href");
-            var request = $.ajax({
-                url: url,
-                method: "POST",
-            });
-            request.done(function () {
+        $(document).ready(function () {
+            $(".delete-player").click(function () {
+                $this = $(this);
                 $this.children('i')
-                    .removeClass('fa-cog')
-                    .removeClass('fa-spin')
-                    .addClass('fa-check')
-                    .addClass('color-green');
-                $this.closest('tr').fadeOut(1500);
+                    .removeClass('fa-trash-o')
+                    .removeClass('color-red')
+                    .addClass('fa-cog')
+                    .addClass('fa-spin');
+                var url = $(this).data("href");
+                var request = $.ajax({
+                    url: url,
+                    method: "POST",
+                });
+                request.done(function () {
+                    $this.children('i')
+                        .removeClass('fa-cog')
+                        .removeClass('fa-spin')
+                        .addClass('fa-check')
+                        .addClass('color-green');
+                    $this.closest('tr').fadeOut(1500);
+                });
+                request.fail(function () {
+                    $this.children('i')
+                        .removeClass('fa-cog')
+                        .removeClass('fa-spin')
+                        .addClass('fa-times')
+                        .addClass('color-red');
+                });
+
+
+
             });
-            request.fail(function () {
-                $this.children('i')
-                    .removeClass('fa-cog')
-                    .removeClass('fa-spin')
-                    .addClass('fa-times')
-                    .addClass('color-red');
-            });
+        });
 
-
-
-        })
     </script>
 {% endblock %}
