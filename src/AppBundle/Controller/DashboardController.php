@@ -54,7 +54,6 @@ class DashboardController extends Controller
             if ($team->isValidPlayer($player)) {
                 $team->addPlayer($player);
                 $player->setTeam($team);
-                $team->setCapacity($team->getCapacity()+1);
                 $em->persist($player);
             }
 
@@ -118,7 +117,6 @@ class DashboardController extends Controller
             /** @var Team $team */
             $team = $player->getTeam();
 
-            $team->setCapacity($team->getCapacity()-1);
             $team->removePlayer($player);
             $em->persist($team);
             $em->flush();

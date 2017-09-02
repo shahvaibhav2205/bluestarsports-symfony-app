@@ -138,7 +138,7 @@ class Team
      * @param integer $capacity
      * @return Team
      */
-    public function setCapacity($capacity)
+    private function setCapacity($capacity)
     {
         $this->capacity = $capacity;
         return $this;
@@ -149,7 +149,9 @@ class Team
      */
     public function addPlayer(Player $player)
     {
-        $this->getPlayers()[] = $player;
+        $this->players[] = $player;
+        $player->setTeam($this);
+        $this->setCapacity($this->getCapacity()+1);
     }
 
     /**
@@ -157,10 +159,12 @@ class Team
      */
     public function removePlayer(Player $player)
     {
-        if (!$this->players->contains($player)) {
-            return;
+        foreach ($this->players as $key => $value) {
+            if($value === $player){
+                unset($this->players[$key]);
+            }
         }
-        $this->players->removeElement($player);
+        $this->setCapacity($this->getCapacity()-1);
         $player->setTeam(null);
     }
 

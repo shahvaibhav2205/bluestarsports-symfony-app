@@ -12,8 +12,15 @@ namespace AppBundle\Factory;
 use AppBundle\Entity\Player;
 use AppBundle\Enum\PlayerRoleEnum;
 
+/**
+ * Class PlayerFactory
+ * @package AppBundle\Factory
+ */
 class PlayerFactory
 {
+    /**
+     * @return Player
+     */
     public static function createNewPlayer()
     {
         $player = new Player();
