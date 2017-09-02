@@ -186,6 +186,4 @@ class Team
             return true;
         }
     }
-
-
 }

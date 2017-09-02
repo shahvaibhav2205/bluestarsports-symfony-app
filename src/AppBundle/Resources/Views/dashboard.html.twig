@@ -10,12 +10,16 @@
 
 {% block content %}
     <div class="row header">
-        <div class="col-md-10">
-            <h2>{{ team.owner.name }}'s {{ team.name }}</h2>
+        <div class="col-md-6">
+            <h4>{{ team.owner.name }}'s </h4>
+            <h2>{{ team.name }}</h2>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-6">
             <a href="{{ path('create_roster', {'id': team.id}) }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">
                     {% if team.capacity > 0 %} Add Roster(s) {% else %} Generate Roster {% endif %}
+            </a>
+            <a href="{{ path('assign_random_roles', {'id': team.id}) }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">
+                Assign Roles
             </a>
         </div>
 
@@ -24,6 +28,7 @@
         <thead>
         <tr>
             <th>#</th>
+            <th>Status</th>
             <th>Player name</th>
             <th>Strength</th>
             <th>Speed</th>
@@ -38,6 +43,15 @@
         {% for player in team.players %}
         <tr>
             <th scope="row">{{ loop.index }}</th>
+            <td>
+                {% if player.role == "starter" %}
+                    <i class="fa fa-play"></i>
+                {% elseif player.role == "substitute" %}
+                    <i class="fa fa-pause"></i>
+                {% else %}
+                    <i class="fa fa-circle-o"></i>
+                {% endif %}
+            </td>
             <td>{{ player.name }}</td>
             <td>{{ player.strength }}</td>
             <td>{{ player.speed }}</td>
