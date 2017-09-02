@@ -204,4 +204,29 @@ class Player
     {
         return $this->getSpeed() + $this->getStrength() + $this->getAgility();
     }
+
+    /**
+     * Assign a role randomly,
+     *
+     * @param $starters pass-by-reference to keep it updated
+     * @param $substitutes pass-by-reference to keep it updated
+     */
+    public function assignRole(&$starters, &$substitutes)
+    {
+        if ($starters > 0 && $substitutes > 0) {
+            if (rand(1,2) == 1) {
+                $this->setRole(PlayerRoleEnum::STARTER);
+                $starters--;
+            } else {
+                $this->setRole(PlayerRoleEnum::SUBSTITUTE);
+                $substitutes--;
+            }
+        } elseif ($starters > 0) {
+            $this->setRole(PlayerRoleEnum::STARTER);
+            $starters--;
+        } else {
+            $this->setRole(PlayerRoleEnum::SUBSTITUTE);
+            $substitutes--;
+        }
+    }
 }

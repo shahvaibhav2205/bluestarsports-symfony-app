@@ -57,16 +57,4 @@ class RegisterController extends Controller
             'form' =>   $teamForm->createView()
         ]);
     }
-
-    /**
-     * @Route("/list", name="list_lead")
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function listAction()
-    {
-        $leagues = $this->getDoctrine()->getRepository("AppBundle:League")->findAll();
-        dump($leagues);
-
-        return $this->render("base.html.twig");
-    }
 }

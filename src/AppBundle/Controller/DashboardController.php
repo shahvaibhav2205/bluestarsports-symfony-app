@@ -79,25 +79,9 @@ class DashboardController extends Controller
 
         foreach ($team->getPlayers() as $teamPlayer) {
 
-            if ($starters > 0 && $substitutes > 0) {
-                if (rand(1,2) == 1) {
-                    $teamPlayer->setRole(PlayerRoleEnum::STARTER);
-                    $starters--;
-                } else {
-                    $teamPlayer->setRole(PlayerRoleEnum::SUBSTITUTE);
-                    $substitutes--;
-                }
-            } elseif ($starters > 0) {
-                $teamPlayer->setRole(PlayerRoleEnum::STARTER);
-                $starters--;
-            } else {
-                $teamPlayer->setRole(PlayerRoleEnum::SUBSTITUTE);
-                $substitutes--;
-            }
-
+            $teamPlayer->assignRole($starters, $substitutes);
             $em->persist($teamPlayer);
         }
-
 
         $em->persist($team);
         $em->flush();
@@ -118,6 +102,7 @@ class DashboardController extends Controller
             $team = $player->getTeam();
 
             $team->removePlayer($player);
+            $em->persist($player);
             $em->persist($team);
             $em->flush();
 
