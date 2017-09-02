@@ -181,6 +181,8 @@ class Team
 
             if ($player->getName() === $teamPlayer->getName()) {
                 return false;
+            } elseif ($player->getTotalAttributeScore() > 100) {
+                return false;
             } elseif ($player->getTotalAttributeScore() == $teamPlayer->getTotalAttributeScore()) {
                 return false;
             } elseif ($player->getSalary() > 175) {
