@@ -5,6 +5,18 @@
         .header{
             margin: 10px auto;
         }
+        a.btn.btn-primary.pull-right {
+            margin: auto 5px;
+        }
+        .color-red{
+            color:  red;
+        }
+        .color-green{
+            color:  limegreen;
+        }
+        .delete-player:hover {
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 
@@ -15,10 +27,10 @@
             <h2>{{ team.name }}</h2>
         </div>
         <div class="col-md-6">
-            <a href="{{ path('create_roster', {'id': team.id}) }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">
+            <a href="{{ path('fill_roster', {'id': team.id}) }}" class="btn btn-primary btn-lg active pull-right" role="button" aria-pressed="true">
                     {% if team.capacity > 0 %} Add Roster(s) {% else %} Generate Roster {% endif %}
             </a>
-            <a href="{{ path('assign_random_roles', {'id': team.id}) }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">
+            <a href="{{ path('assign_random_roles', {'id': team.id}) }}" class="btn btn-primary btn-lg active pull-right" role="button" aria-pressed="true">
                 Assign Roles
             </a>
         </div>
@@ -59,9 +71,50 @@
             <td>{{ player.totalAttributeScore }}</td>
             <td><b>{{ player.salary }}</b></td>
             <td>{{ player.role|humanize() }}</td>
-            <td>X</td>
+            <td>
+                <div class="delete-player" data-href="{{ path("delete_player", {'id' : player.id}) }}" aria-label="Delete">
+                    <i class="fa fa-trash-o color-red fa-2x"></i>
+                </div>
+                {#<i class="fa fa-trash-o" aria-hidden="true"></i>#}
+            </td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
+{% endblock %}
+
+{% block additionalJavaScripts %}
+    <script type="application/javascript">
+        $(".delete-player").click(function () {
+            $this = $(this);
+            $this.children('i')
+                .removeClass('fa-trash-o')
+                .removeClass('color-red')
+                .addClass('fa-cog')
+                .addClass('fa-spin');
+            var url = $(this).data("href");
+            var request = $.ajax({
+                url: url,
+                method: "POST",
+            });
+            request.done(function () {
+                $this.children('i')
+                    .removeClass('fa-cog')
+                    .removeClass('fa-spin')
+                    .addClass('fa-check')
+                    .addClass('color-green');
+                $this.closest('tr').fadeOut(1500);
+            });
+            request.fail(function () {
+                $this.children('i')
+                    .removeClass('fa-cog')
+                    .removeClass('fa-spin')
+                    .addClass('fa-times')
+                    .addClass('color-red');
+            });
+
+
+
+        })
+    </script>
 {% endblock %}

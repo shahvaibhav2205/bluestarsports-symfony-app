@@ -42,7 +42,7 @@ class Team
 
     /**
      * @var Player[]
-     * @ORM\OneToMany(targetEntity="Player", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="Player", mappedBy="team", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $players = [];
 
@@ -157,12 +157,11 @@ class Team
      */
     public function removePlayer(Player $player)
     {
-        if(($key = array_search($player, $this->getPlayers())) !== false) {
-            unset($this->getPlayers()[$key]);
-
-            //set the indexed numerically
-            $this->setPlayers(array_values($this->getPlayers()));
+        if (!$this->players->contains($player)) {
+            return;
         }
+        $this->players->removeElement($player);
+        $player->setTeam(null);
     }
 
     /**

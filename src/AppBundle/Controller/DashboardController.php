@@ -15,6 +15,7 @@ use AppBundle\Enum\PlayerRoleEnum;
 use AppBundle\Factory\PlayerFactory;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -25,6 +26,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends Controller
 {
     /**
+     * Shows the team and the players.
+     *
      * @Route("/team/{id}", name="team_dashboard")
      */
     public function dashboardAction(Team $team)
@@ -35,7 +38,9 @@ class DashboardController extends Controller
     }
 
     /**
-     * @Route("/create_roster/{id}", name="create_roster")
+     * Fills up the roster to the capacity.
+     *
+     * @Route("/fill/roster/{id}", name="fill_roster")
      */
     public function createRosterAction(Team $team)
     {
@@ -61,7 +66,9 @@ class DashboardController extends Controller
     }
 
     /**
-     * @Route("/assign_roles/{id}", name="assign_random_roles")
+     * Randomly assigns roles to players.
+     *
+     * @Route("/assign/roles/{id}", name="assign_random_roles")
      */
     public function assignRolesAction(Team $team)
     {
@@ -97,5 +104,30 @@ class DashboardController extends Controller
         $em->flush();
 
         return $this->redirectToRoute("team_dashboard", ['id'  =>  $team->getId()]);
+    }
+
+    /**
+     * @Route("/delete/player/{id}", name="delete_player")
+     */
+    public function deletePlayerAction(Player $player)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        if ($player) {
+            /** @var Team $team */
+            $team = $player->getTeam();
+
+            $team->setCapacity($team->getCapacity()-1);
+            $team->removePlayer($player);
+            $em->persist($team);
+            $em->flush();
+
+            return (new Response())->setStatusCode(Response::HTTP_OK);
+        }
+
+        return (new Response())->setStatusCode(Response::HTTP_BAD_REQUEST);
+
+
     }
 }
