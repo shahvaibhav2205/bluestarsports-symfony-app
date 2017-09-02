@@ -9,20 +9,18 @@
 namespace AppBundle\Entity;
 
 
+use AppBundle\Enum\PlayerRoleEnum;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Player
  * @package AppBundle\Entity
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PlayerRepository")
  * @ORM\Table(name="player")
  */
 class Player
 {
-    const ROLE_STARTER      = "started";
-    const ROLE_SUBSTITUTE   = "substitute";
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -51,6 +49,11 @@ class Player
     protected $strength;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $salary;
+
+    /**
      * @var Team
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="players")
@@ -62,17 +65,6 @@ class Player
      * @ORM\Column(type="string")
      */
     protected $role;
-
-    /**
-     * Player constructor.
-     * @param $team
-     * @param $type
-     */
-    public function __construct($team, $type)
-    {
-        $this->team = $team;
-        $this->type = $type;
-    }
 
     /**
      * @return mixed
@@ -173,7 +165,7 @@ class Player
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getRole()
     {
@@ -181,12 +173,35 @@ class Player
     }
 
     /**
-     * @param mixed $role
+     * @param string $role
      * @return Player
      */
     public function setRole($role)
     {
         $this->role = $role;
         return $this;
+    }
+    /**
+    * @return integer
+    */
+    public function getSalary()
+    {
+        return $this->salary;
+    }
+
+    /**
+    * @param integer $salary
+    */
+    public function setSalary($salary)
+    {
+        $this->salary = $salary;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getTotalAttributeScore()
+    {
+        return $this->getSpeed() + $this->getStrength() + $this->getAgility();
     }
 }

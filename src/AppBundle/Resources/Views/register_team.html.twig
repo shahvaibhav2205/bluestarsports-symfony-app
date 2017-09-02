@@ -1,1 +1,19 @@
-{% extends "" %}
+{% extends "base.html.twig" %}
+{% form_theme form "bootstrap_3_layout.html.twig" %}
+
+{% block content %}
+    {{ form_start(form) }}
+
+    <div class="form-group">
+        <label for="exampleInputPassword1">Team name</label>
+        {{ form_widget(form.name) }}
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Owner name</label>
+        {{ form_widget(form.owner.name) }}
+    </div>
+    <button type="submit right" class="btn btn-outline-primary">Submit</button>
+
+    {{ form_end(form) }}
+
+{% endblock %}

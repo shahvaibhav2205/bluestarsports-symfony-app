@@ -41,14 +41,6 @@ class Team
     protected $owner;
 
     /**
-     * @var League
-     *
-     * @ORM\ManyToOne(targetEntity="League")
-     * @JoinColumn(name="league_id", referencedColumnName="id")
-     */
-    protected $league;
-
-    /**
      * @var Player[]
      * @ORM\OneToMany(targetEntity="Player", mappedBy="team")
      */
@@ -63,13 +55,13 @@ class Team
      * Team constructor.
      * @param $name
      * @param Owner $owner
-     * @param League $league
+     * @param int $capacity
      */
-    public function __construct($name, Owner $owner, League $league)
+    public function __construct($name, Owner $owner, $capacity = 0)
     {
         $this->name = $name;
         $this->owner = $owner;
-        $this->league = $league;
+        $this->capacity = $capacity;
     }
 
     /**
@@ -117,24 +109,6 @@ class Team
     }
 
     /**
-     * @return League
-     */
-    public function getLeague()
-    {
-        return $this->league;
-    }
-
-    /**
-     * @param League $league
-     * @return Team
-     */
-    public function setLeague($league)
-    {
-        $this->league = $league;
-        return $this;
-    }
-
-    /**
      * @return Player[]
      */
     public function getPlayers()
@@ -153,7 +127,7 @@ class Team
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getCapacity()
     {
@@ -161,7 +135,7 @@ class Team
     }
 
     /**
-     * @param mixed $capacity
+     * @param integer $capacity
      * @return Team
      */
     public function setCapacity($capacity)
@@ -169,4 +143,49 @@ class Team
         $this->capacity = $capacity;
         return $this;
     }
+
+    /**
+     * @param Player $player
+     */
+    public function addPlayer(Player $player)
+    {
+        $this->getPlayers()[] = $player;
+    }
+
+    /**
+     * @param Player $player
+     */
+    public function removePlayer(Player $player)
+    {
+        if(($key = array_search($player, $this->getPlayers())) !== false) {
+            unset($this->getPlayers()[$key]);
+
+            //set the indexed numerically
+            $this->setPlayers(array_values($this->getPlayers()));
+        }
+    }
+
+    /**
+     * @param Player $player
+     * @return bool
+     */
+    public function isValidPlayer(Player $player)
+    {
+        if ($this->getCapacity() == 0) {
+            return true;
+        }
+        foreach ($this->getPlayers() as $teamPlayer) {
+
+            if ($player->getName() === $teamPlayer->getName()) {
+                return false;
+            } elseif ($player->getTotalAttributeScore() == $teamPlayer->getTotalAttributeScore()) {
+                return false;
+            } elseif ($player->getSalary() > 175) {
+                return false;
+            }
+            return true;
+        }
+    }
+
+
 }

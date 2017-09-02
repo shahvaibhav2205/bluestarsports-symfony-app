@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block additionalStyleSheets %}
+    <style type="text/css">
+        .header{
+            margin: 10px auto;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row header">
+        <div class="col-md-10">
+            <h2>{{ team.owner.name }}'s {{ team.name }}</h2>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ path('create_roster', {'id': team.id}) }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">
+                    {% if team.capacity > 0 %} Add Roster(s) {% else %} Generate Roster {% endif %}
+            </a>
+        </div>
+
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Player name</th>
+            <th>Strength</th>
+            <th>Speed</th>
+            <th>Agility</th>
+            <th>Total score</th>
+            <th>Salary</th>
+            <th>Role</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for player in team.players %}
+        <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ player.name }}</td>
+            <td>{{ player.strength }}</td>
+            <td>{{ player.speed }}</td>
+            <td>{{ player.agility }}</td>
+            <td>{{ player.totalAttributeScore }}</td>
+            <td><b>{{ player.salary }}</b></td>
+            <td>{{ player.role|humanize() }}</td>
+            <td>X</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
